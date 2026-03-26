@@ -9,6 +9,9 @@ import {
   FaJsSquare,
   FaReact,
   FaNodeJs,
+  FaGlobe,
+  FaBriefcase,
+  FaGraduationCap,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
@@ -26,349 +29,191 @@ const App = () => {
   }, [isDarkMode]);
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
-  const toggleSkills = () => {
-    setShowSkills(!showSkills);
-    setShowContactForm(false);
-    setSuccess(false);
-  };
-  const toggleContactForm = () => {
-    setShowContactForm(!showContactForm);
-    setShowSkills(false);
-    setSuccess(false);
-  };
+  const toggleContactForm = () => { setShowContactForm(!showContactForm); setShowSkills(false); };
 
   const variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
+    exit: { opacity: 0, y: -15 },
   };
 
-  // Envoi mail EmailJS
   const sendEmail = (e) => {
     e.preventDefault();
-
-    emailjs
-      .sendForm(
-        "service_pm5euyc",
-        "template_kglq2fe",
-        form.current,
-        "yd-a9-SRb74iGWN1D"
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          setSuccess(true);
-          form.current.reset();
-        },
-        (error) => {
-          console.log(error.text);
-          setSuccess(false);
-        }
-      );
+    emailjs.sendForm("service_pm5euyc", "template_kglq2fe", form.current, "yd-a9-SRb74iGWN1D")
+      .then(() => { setSuccess(true); form.current.reset(); }, () => setSuccess(false));
   };
 
-  const SkillsSection = () => (
-    <motion.div
-      key="skills"
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      variants={variants}
-      transition={{ duration: 0.4 }}
-      className="min-h-screen bg-white dark:bg-black text-black dark:text-white p-10"
-    >
-      <h1 className="text-4xl font-bold mb-10 text-center">
-        Mes Compétences Techniques
-      </h1>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-10 max-w-5xl mx-auto">
-        {[FaHtml5, FaCss3Alt, FaJsSquare, FaReact, FaNodeJs].map(
-          (Icon, i) => (
-            <div key={i} className="flex flex-col items-center space-y-2">
-              <Icon className="text-8xl text-current" />
-              <span>
-                {["HTML5", "CSS3", "JavaScript", "React", "Node.js"][i]}
-              </span>
-            </div>
-          )
-        )}
-      </div>
-      <div className="mt-10 text-center">
-        <button
-          onClick={toggleSkills}
-          className="px-6 py-3 bg-gray-300 dark:bg-gray-700 rounded-md font-semibold hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-        >
-          Retour à l'accueil
-        </button>
-      </div>
-    </motion.div>
-  );
-
   const ContactFormSection = () => (
-    <motion.div
-      key="contact"
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      variants={variants}
-      transition={{ duration: 0.4 }}
-      className="min-h-screen bg-white dark:bg-black text-black dark:text-white p-10 flex flex-col items-center justify-center"
-    >
-      <h1 className="text-4xl font-bold mb-10 text-center">Contactez-moi</h1>
-      <form
-        ref={form}
-        onSubmit={sendEmail}
-        className="w-full max-w-lg space-y-6"
-      >
-        <input
-          type="text"
-          name="user_name"
-          placeholder="Votre nom"
-          required
-          className="w-full p-3 border rounded dark:bg-gray-800 dark:border-gray-600"
-        />
-        <input
-          type="email"
-          name="user_email"
-          placeholder="Votre email"
-          required
-          className="w-full p-3 border rounded dark:bg-gray-800 dark:border-gray-600"
-        />
-        <textarea
-          name="message"
-          placeholder="Votre message"
-          required
-          rows={6}
-          className="w-full p-3 border rounded dark:bg-gray-800 dark:border-gray-600 resize-none"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition"
-        >
-          Envoyer
-        </button>
-        {success && (
-          <p className="text-green-500 mt-4 text-center">
-            Message envoyé avec succès ! ✅
-          </p>
-        )}
+    <motion.div key="contact" initial="hidden" animate="visible" exit="exit" variants={variants} className="min-h-screen bg-white dark:bg-slate-900 p-10 flex flex-col items-center justify-center relative z-50">
+      <h2 className="text-3xl font-bold mb-10 tracking-tight">Demande de Collaboration</h2>
+      <form ref={form} onSubmit={sendEmail} className="w-full max-w-lg space-y-4">
+        <input type="text" name="user_name" placeholder="Nom complet" required className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500" />
+        <input type="email" name="user_email" placeholder="Email professionnel" required className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500" />
+        <textarea name="message" placeholder="Votre message..." required rows={5} className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none" />
+        <button type="submit" className="w-full bg-slate-900 dark:bg-indigo-600 text-white py-4 rounded-xl font-bold hover:opacity-90 transition-opacity">Envoyer</button>
+        {success && <p className="text-green-600 font-bold text-center mt-4 italic">Votre message a été transmis avec succès.</p>}
       </form>
-      <button
-        onClick={toggleContactForm}
-        className="mt-10 px-6 py-3 bg-gray-300 dark:bg-gray-700 rounded-md font-semibold hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-      >
-        Retour à l'accueil
-      </button>
+      <button onClick={toggleContactForm} className="mt-10 text-slate-500 underline text-sm uppercase tracking-widest">Fermer</button>
     </motion.div>
   );
 
   const MainContent = () => (
-    <motion.div
-      key="main"
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      variants={variants}
-      transition={{ duration: 0.4 }}
-    >
-      {/* Hero */}
+    <motion.div key="main" initial="hidden" animate="visible" exit="exit" variants={variants}>
+      {/* Hero: Minimaliste, Professionnel et Épuré */}
       <section
-        className="h-screen flex flex-col justify-center items-center text-center relative overflow-hidden"
+        className="h-screen flex flex-col justify-center items-center text-center px-6 relative overflow-hidden"
         style={{
           backgroundImage: `url(https://images.unsplash.com/photo-1521737711867-e3b97375f902)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-70 dark:bg-opacity-80" />
+        {/* Overlay Sombre pour assurer la lisibilité du texte blanc */}
+        <div className="absolute inset-0 bg-black/70 dark:bg-black/85" />
+        
         <div className="relative z-10">
-          <h1 className="text-5xl font-bold mb-4 text-white">Fawzi Youjil</h1>
-          <p className="text-xl mb-6 text-white">
-            Customer Care Expert
+          <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter text-white HeroTitle">
+            Fawzi Youjil
+          </h1>
+          <p className="text-2xl font-light text-slate-200 mb-10 tracking-tight HeroSubtitle">
+            Expert <span className="font-semibold text-white">Customer Care</span> & Product Optimization
           </p>
-          <p className="max-w-xl mx-auto text-gray-300 mb-10">
-            Passionné par la tech,le code, les voyages et le relationnel et l'expérience utilisateur,
-            je construis des ponts entre humain et numérique.
-          </p>
-          <a
-            href="/CV-FAWZI-YOUJIL.pdf"
-            download
-            className="inline-flex items-center gap-2 bg-white text-black px-5 py-3 rounded-full font-semibold hover:bg-gray-300 transition"
-          >
-            <FaDownload /> Télécharger mon CV
-          </a>
+          
+          <div className="flex flex-wrap justify-center gap-4 HeroButtons">
+            <a href="/CV-FAWZI-YOUJIL.pdf" download className="flex items-center gap-3 bg-white text-slate-950 px-8 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-xl DownloadCVButton">
+              <FaDownload className="text-sm" /> Télécharger mon CV
+            </a>
+          </div>
+        </div>
 
-          {/* Flèche pour scroll */}
-<div className="mt-6 flex justify-center">
-  <button
-    onClick={() => {
-      const section = document.getElementById("parcours");
-      section.scrollIntoView({ behavior: "smooth" });
-    }}
-    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-white text-white hover:bg-white hover:text-indigo-600 transition-colors animate-bounce"
-    aria-label="Aller à Parcours professionnel"
-  >
-    ↓
-  </button>
-</div>
+        <button onClick={() => document.getElementById("parcours").scrollIntoView({ behavior: "smooth" })} className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-400 animate-bounce ScrollIndicator">
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold block mb-2">Découvrir</span>
+          <div className="mx-auto w-[1px] h-12 bg-slate-300 dark:bg-slate-700" />
+        </button>
+      </section>
 
+      {/* Parcours: Focus sur la Qualité (Apple/Foodles) */}
+      <section id="parcours" className="py-32 px-6 max-w-6xl mx-auto ParcoursSection">
+        <div className="flex items-center gap-4 mb-16">
+          <div className="w-12 h-[2px] bg-indigo-600" />
+          <h2 className="text-sm uppercase tracking-[0.4em] font-black text-slate-400">Expériences Certifiées</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-12">
+          <div className="p-10 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow ParcoursCard">
+            <div className="flex justify-between items-start mb-6">
+              <h3 className="text-2xl font-bold">Foodles</h3>
+              <span className="text-xs font-bold px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-full">2023 — Aujourd'hui</span>
+            </div>
+            <p className="text-indigo-600 font-bold mb-4 uppercase text-xs tracking-widest">Team Lead Customer Care</p>
+            <ul className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              <li className="flex gap-2"><span>•</span> Gestion des flux multicanaux complexes (B2B & B2C).</li>
+              <li className="flex gap-2"><span>•</span> Optimisation des process de rétention et résolution de litiges.</li>
+              <li className="flex gap-2"><span>•</span> Support technique de second niveau pour partenaires stratégiques.</li>
+            </ul>
+          </div>
+
+          <div className="p-10 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow ParcoursCard">
+            <div className="flex justify-between items-start mb-6">
+              <h3 className="text-2xl font-bold">Apple</h3>
+              <span className="text-xs font-bold px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full">2019 — 2023</span>
+            </div>
+            <p className="text-slate-500 font-bold mb-4 uppercase text-xs tracking-widest">Customer Care Expert</p>
+            <ul className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              <li className="flex gap-2"><span>•</span> Ambassadeur des standards de service Apple (Net Promoter Score élevé).</li>
+              <li className="flex gap-2"><span>•</span> Analyse comportementale et déploiement de stratégies de satisfaction.</li>
+              <li className="flex gap-2"><span>•</span> Maintenance logicielle et diagnostic technique avancé.</li>
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* Parcours */}
-      <section id="parcours" className="py-20 px-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6">Parcours professionnel</h2>
-        <div className="space-y-10 text-gray-700 dark:text-gray-300">
+      {/* Section Langues & Soft Skills - Crucial pour la Suisse */}
+      <section className="py-32 bg-slate-900 text-white overflow-hidden LangSkillsSection">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
           <div>
-            <h3 className="text-xl font-semibold">Customer Care Expert – Apple</h3>
-            <p className="text-sm italic">2019 – 2023 </p>
-            <ul className="list-disc list-inside mt-2">
-              <li>Gestion des plaintes et résolutions des problèmes pour assurer la satisfaction client</li>
-              <li>Mise en place de stratégie d’amélioration continue du service client</li>
-              <li>Réparation modulaire</li>
-            </ul>
+            <div className="flex items-center gap-4 mb-8">
+              <FaGlobe className="text-indigo-400" />
+              <h2 className="text-sm uppercase tracking-[0.4em] font-bold">Compétences Linguistiques</h2>
+            </div>
+            <div className="space-y-6">
+              {[{l: "Français", v: "Langue maternelle / Expert"}, {l: "Anglais", v: "Professionnel (C1/C2)"}, {l: "Espagnol", v: "Notions (A2/B1 - En cours d'apprentissage)"}, {l: "Japonais", v: "Notions (A2/B1 - En cours d'apprentissage)"}].map((lang, idx) => (
+                <div key={idx} className="border-b border-white/10 pb-4">
+                  <div className="flex justify-between mb-2 italic text-sm LangItem">
+                    <span>{lang.l}</span>
+                    <span className="text-indigo-400">{lang.v}</span>
+                  </div>
+                  <div className="h-[2px] w-full bg-white/5"><motion.div initial={{width: 0}} whileInView={{width: idx === 0 ? "100%" : idx === 1 ? "85%" : "30%"}} className="h-full bg-indigo-500" /></div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div>
-            <h3 className="text-xl font-semibold">Customer Care Expert – Foodles</h3>
-            <p className="text-sm italic">2023 – 2025 </p>
-            <ul className="list-disc list-inside mt-2">
-              <li>Gestion multicanal de la relation client (email, téléphone, chat)</li>
-              <li>Contribution à l'amélioration des process internes</li>
-              <li>Support B2B pour les entreprises partenaires</li>
-              <li>Suivi de dossiers clients complexes (retours produits, remboursements, litiges)</li>
-            </ul>
+          <div className="space-y-10">
+            <h2 className="text-4xl font-light italic quote">"L'excellence n'est pas un acte, mais une habitude."</h2>
+            <div className="grid grid-cols-2 gap-6 text-sm uppercase tracking-tighter text-slate-400 SoftSkills">
+              <div className="p-4 border border-white/10 rounded-xl">Diplomatie</div>
+              <div className="p-4 border border-white/10 rounded-xl">Rigueur</div>
+              <div className="p-4 border border-white/10 rounded-xl">Analyse Data</div>
+              <div className="p-4 border border-white/10 rounded-xl">Orienté Solution</div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Formation */}
-      <section className="py-20 px-6 max-w-4xl mx-auto bg-gray-100 dark:bg-gray-900">
-        <h2 className="text-3xl font-bold mb-6">Formation</h2>
-        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-3">
-          <li>
-            <strong>Titre professionnel</strong> – Développeur Web Full Stack
-          </li>
-          <li>Master [Administration, Echange International] – [UPEC], [2018]</li>
-          <li>Licence [Administration, Echange International] – [UPEC], [2015]</li>
-          <li>Baccalauréat Technologique [Comptabilité, Finance, Entreprise] – [Langevin], [2012]</li>
-        </ul>
-      </section>
-
-      {/* Valeurs */}
-      <section className="py-16 bg-white dark:bg-gray-900">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-10 text-gray-900 dark:text-white">
-            🎖️ Mes valeurs / Mon approche
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              { icon: "🤝", title: "Empathie", desc: "Comprendre vraiment ce que le client vit, pas seulement ce qu’il dit." },
-              { icon: "⚡", title: "Réactivité", desc: "Répondre vite, avec efficacité et clarté. Chaque minute compte." },
-              { icon: "🧠", title: "Autonomie", desc: "Trouver des solutions par moi-même, en gardant l’objectif en tête." },
-              { icon: "🔍", title: "Sens du détail", desc: "Chaque mot, chaque interaction a son importance dans l’expérience client." },
-            ].map((value, index) => (
-              <motion.div
-                key={index}
-                className="p-6 rounded-2xl shadow-lg bg-gray-50 dark:bg-gray-800"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-4xl mb-4">{value.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">{value.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+      <section className="py-32 px-6 max-w-4xl mx-auto FormationSection">
+        <div className="flex items-center gap-4 mb-16">
+          <FaGraduationCap className="text-indigo-600" />
+          <h2 className="text-sm uppercase tracking-[0.4em] font-black text-slate-400">Cursus Académique</h2>
+        </div>
+        <div className="space-y-6">
+          {[
+            {t: "Développeur Web Full Stack", d: "Titre Professionnel RNCP"},
+            {t: "Master Administration / Échange International", d: "UPEC - 2018"},
+            {t: "Licence Administration / Échange International", d: "UPEC - 2015"}
+          ].map((item, i) => (
+            <div key={i} className="flex gap-6 group cursor-default FormationItem">
+              <span className="text-slate-300 group-hover:text-indigo-500 transition-colors font-mono">0{i+1}</span>
+              <div>
+                <h4 className="font-bold text-lg">{item.t}</h4>
+                <p className="text-slate-500 text-sm">{item.d}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Compétences générales */}
-      <section className="py-20 px-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6">Compétences</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Relation client & Soft skills</h4>
-            <ul className="list-disc list-inside">
-              <li>Écoute active, gestion des conflits</li>
-              <li>Empathie, diplomatie, rigueur</li>
-              <li>Communication claire et synthétique</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Compétences techniques</h4>
-            <ul className="list-disc list-inside">
-              <li>React, JavaScript, Node.js</li>
-              <li>CRM : Salesforce, Zendesk</li>
-              <li>Support logiciel et matériel (Apple)</li>
-            </ul>
-          </div>
-        </div>
-        <div className="mt-8 text-center flex justify-center gap-6">
-          
-          <button
-  onClick={toggleContactForm}
-  className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-600 hover:to-purple-700 shadow-lg transition-all transform hover:scale-105"
->
-  Me contacter
-</button>
-
-        </div>
-      </section>
-
-      {/* Pourquoi moi */}
-      <section className="py-20 px-6 max-w-3xl mx-auto bg-gradient-to-r from-indigo-500 to-purple-600 text-center text-white rounded-2xl shadow-lg">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">Ce qui me distingue ✨</h2>
-        <p className="text-lg md:text-xl max-w-2xl mx-auto">
-          Je ne me contente pas de résoudre un problème : je cherche à comprendre, anticiper et créer une expérience qui marque.  
-          Curieux, déterminé et humain, je transforme chaque challenge en opportunité et chaque interaction en valeur ajoutée.  
-          Si vous cherchez quelqu’un qui allie expertise technique et sens du relationnel, vous venez de le trouver.
+      {/* Call to Action */}
+      <section className="py-32 px-6 bg-slate-900 text-white text-center CTASection">
+        <h2 className="text-5xl font-black mb-10 tracking-tighter">Prêt pour une nouvelle étape ?</h2>
+        <p className="text-indigo-100 mb-12 max-w-xl mx-auto font-medium">
+          Je suis mobile et prêt à m'investir au sein du marché helvétique pour apporter mon expertise en relation client et ma vision technique.
         </p>
+        <button onClick={toggleContactForm} className="bg-white text-indigo-600 px-12 py-5 rounded-full font-black text-sm uppercase tracking-[0.2em] shadow-2xl hover:scale-110 transition-transform ContactMeButton">
+          Me Contacter
+        </button>
       </section>
 
-      {/* Contact rapide */}
-      <div className="flex justify-center gap-6 text-3xl mt-10 mb-20">
-        <motion.a
-          href="https://www.linkedin.com/in/fawzi-youjil-39415b17a"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn"
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 0.9 }}
-          className="hover:text-blue-500 transition-colors"
-        >
-          <FaLinkedin />
-        </motion.a>
-      </div>
-
-      <footer className="text-center text-sm text-gray-600 dark:text-gray-400 py-6 bg-white dark:bg-black">
-        © 2025 Fawzi Youjil. Tous droits réservés.
+      {/* Footer Minimaliste */}
+      <footer className="py-20 text-center text-slate-400 text-[10px] uppercase tracking-widest Footer SelectionDisabled">
+        <div className="flex justify-center gap-8 mb-6 text-xl SelectionDisabled">
+           <a href="https://www.linkedin.com/in/fawzi-youjil-39415b17a" target="_blank" rel="noreferrer" className="hover:text-indigo-500 LinkedInIcon"><FaLinkedin /></a>
+        </div>
+        © 2026 Fawzi Youjil — Quality Standard Applied.
       </footer>
     </motion.div>
   );
 
   return (
-    <div className="bg-white text-black dark:bg-black dark:text-white font-sans transition-colors duration-300 min-h-screen relative">
-      {/* Dark Mode Toggle */}
-      <button
-        onClick={toggleDarkMode}
-        className="fixed top-4 right-4 z-50 p-3 rounded-full shadow-lg bg-gray-200 dark:bg-gray-800 text-black dark:text-white hover:scale-110 transition-transform"
-        aria-label="Changer de thème"
-      >
+    <div className="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans transition-colors duration-500 min-h-screen relative selection:bg-indigo-500 selection:text-white MainContainer">
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap'); body { font-family: 'Inter', sans-serif; }`}</style>
+      
+      <button onClick={toggleDarkMode} className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur shadow-lg dark:text-white border border-slate-200 dark:border-slate-800 transition-transform hover:scale-110 DarkModeToggle">
         {isDarkMode ? <FaSun /> : <FaMoon />}
       </button>
 
-      <AnimatePresence mode="wait" initial={false}>
-        {showSkills ? (
-          <SkillsSection key="skills" />
-        ) : showContactForm ? (
-          <ContactFormSection key="contact" />
-        ) : (
-          <MainContent key="main" />
-        )}
+      <AnimatePresence mode="wait">
+        {showContactForm ? <ContactFormSection key="contact" /> : <MainContent key="main" />}
       </AnimatePresence>
     </div>
   );
