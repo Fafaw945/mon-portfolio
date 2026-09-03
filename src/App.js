@@ -829,7 +829,7 @@ function App() {
                 </button>
 
                 <a
-                  href="/CV-FAWZI-YOUJIL.pdf"
+                  href="/CV_Fawzi_Youjil.pdf"
                   download
                   className="flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-7 py-4 text-sm font-bold text-white backdrop-blur transition hover:-translate-y-1 hover:bg-white/10"
                 >
